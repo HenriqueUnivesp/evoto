@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Chapas - {{ eleicao.titulo }} - Sistema de Eleição{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/form_eleicao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Chapas de "{{ eleicao.titulo }}"</h2>
+        <div>
+            <a href="{% url 'election:listar_eleicoes' %}" class="btn btn-secondary">Voltar às Eleições</a>
+            <a href="{% url 'election:excluir_eleicao' eleicao.id %}" class="btn btn-danger">Excluir Eleição</a>
+        </div>
+    </div>
+    
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Informações da Eleição</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Título:</strong> {{ eleicao.titulo }}</p>
+                    <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                    <p><strong>Status:</strong> {{ eleicao.get_status_display }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Data de Início:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Data de Término:</strong> {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Chapas Cadastradas:</strong> {{ chapas|length }}</p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <p><strong>Descrição:</strong> {{ eleicao.descricao }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Chapas Cadastradas</h4>
+            <a href="{% url 'election:criar_eleicao' %}" class="btn btn-light btn-sm">+ Adicionar Nova Chapa</a>
+        </div>
+        <div class="card-body">
+            {% if chapas %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Nome</th>
+                            <th>Presidente</th>
+                            <th>Vice-Presidente</th>
+                            <th>Data de Cadastro</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chapa in chapas %}
+                        <tr>
+                            <td>{{ chapa.numero }}</td>
+                            <td>{{ chapa.nome }}</td>
+                            <td>{{ chapa.presidente_nome }}</td>
+                            <td>{{ chapa.vice_nome }}</td>
+                            <td>{{ chapa.data_cadastro|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'election:editar_chapa' chapa.id %}" class="btn btn-sm btn-warning">Editar</a>
+                                    <a href="{% url 'election:remover_chapa' chapa.id %}" class="btn btn-sm btn-danger">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <p>Nenhuma chapa cadastrada para esta eleição.</p>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'election:criar_eleicao' %}" class="btn btn-primary">Adicionar Primeira Chapa</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,41 @@
+/* Timer Styles */
+.container.main-content .timer {
+    margin-bottom: 25px !important;
+    text-align: center !important;
+    padding: 15px !important;
+    background-color: #f8f9fa !important;
+    border-radius: 6px !important;
+}
+
+.container.main-content .timer h3 {
+    margin-top: 0 !important;
+    color: #343a40 !important;
+    font-weight: bold !important;
+}
+
+.container.main-content .timer-count {
+    font-size: 2em !important;
+    font-weight: bold !important;
+    color: #dc3545 !important;
+}
+
+/* Card Image Styles */
+.container.main-content .card-img-top {
+    height: 140px !important;
+    object-fit: cover !important;
+}
+
+/* Badge Styles */
+.container.main-content .badge {
+    font-size: 1em !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .container.main-content .col-xl-3, 
+    .container.main-content .col-lg-4, 
+    .container.main-content .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}

@@ -1,0 +1,138 @@
+COMANDOS PARA CRIAR O BANCO DE DADOS MYSQL
+
+Instalar o MYSQL installer
+
+Comandos de criação do banco:
+
+1º mysql -u root -p
+
+2º CREATE DATABASE sistema_eleicao CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+ou
+
+                  ^                                          ^ 
+                  |                                          |
+             |---------|                             |--------------|  
+CREATE USER 'django_user'@'localhost' IDENTIFIED BY 'sua_senha_segura';
+GRANT ALL PRIVILEGES ON sistema_eleicao.* TO 'django_user'@'localhost';
+FLUSH PRIVILEGES;
+
+3º Depois verifique o usuário e senha do banco no settings.py:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sistema_eleicao',                        ^
+        'USER': 'django_user',   <<-----------------------|
+        'PASSWORD': 'sua_senha_segura',  <<---------------| 
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    }
+}
+
+
+====================================================================================================
+
+COMANDOS PARA INSTALAR AS DEPENDÊNCIAS DO DJANGO:
+
+1º pip install django  ou para verificar se já possui instalação: django-admin --version
+
+2º pip install mysqlclient   OU pip install pymysql
+
+3º pip install Pillow
+
+4º pip install django-crispy-forms
+
+5º pip install django-widget-tweaks
+
+6º pip install django-bootstrap5
+
+7º python manage.py makemigrations   
+
+8º python manage.py migrate
+
+9º python manage.py createsuperuser  # opcional
+
+10º python manage.py runserver  
+
+
+===================================================================================================
+
+# Sistema de Eleição Django - Estrutura Modernizada
+📦 sistema_eleicao/
+ ┣ 📜 manage.py                  # Script de gerenciamento do Django
+ ┣ 📂 sistema_eleicao/           # Núcleo do projeto
+ ┃ ┣ 📜 __init__.py
+ ┃ ┣ 📜 settings.py              # Configurações centrais
+ ┃ ┣ 📜 urls.py                  # Roteamento principal
+ ┃ ┣ 📜 asgi.py                  # Configuração ASGI
+ ┃ ┗ 📜 wsgi.py                  # Configuração WSGI
+ ┃
+ ┣ 📂 accounts/                  # Gerenciamento de usuários
+ ┃ ┣ 📜 __init__.py
+ ┃ ┣ 📜 admin.py                 # Configuração do admin
+ ┃ ┣ 📜 apps.py                  # Configuração do app
+ ┃ ┣ 📂 migrations/              # Migrações do DB
+ ┃ ┣ 📜 models.py                # Modelos (alunos, professores, diretores)
+ ┃ ┣ 📜 forms.py                 # Formulários de autenticação
+ ┃ ┣ 📜 urls.py                  # Rotas de autenticação
+ ┃ ┣ 📜 views.py                 # Controllers de autenticação
+ ┃ ┗ 📂 templates/
+ ┃   ┗ 📂 accounts/
+ ┃     ┣ 📜 login.html           # Interface de login
+ ┃     ┣ 📜 register.html        # Interface de cadastro
+ ┃     ┗ 📜 profile.html         # Perfil do usuário
+ ┃
+ ┣ 📂 election/                  # Gerenciamento de eleições
+ ┃ ┣ 📜 __init__.py
+ ┃ ┣ 📜 admin.py                 # Configuração do admin
+ ┃ ┣ 📜 apps.py                  # Configuração do app
+ ┃ ┣ 📂 migrations/              # Migrações do DB
+ ┃ ┣ 📜 models.py                # Modelos (eleições, chapas, votos)
+ ┃ ┣ 📜 forms.py                 # Formulários de eleição
+ ┃ ┣ 📜 urls.py                  # Rotas de eleição
+ ┃ ┣ 📜 views.py                 # Controllers de eleição
+ ┃ ┗ 📂 templates/
+ ┃   ┗ 📂 election/
+ ┃     ┣ 📜 listar_chapa.html           # Lista de chapas
+ ┃     ┣ 📜 acesso_votacao.html         # Acesso à votação
+ ┃     ┣ 📜 confirmar_exclusao_chapa.html # Confirmação de exclusão
+ ┃     ┣ 📜 confirmar_voto.html         # Confirmação de voto
+ ┃     ┣ 📜 dashboard.html              # Painel administrativo 
+ ┃     ┣ 📜 editar_chapa.html           # Edição de chapa
+ ┃     ┣ 📜 form_chapa.html             # Cadastro de chapa
+ ┃     ┣ 📜 form_eleicao.html           # Criação de eleição
+ ┃     ┣ 📜 listar_eleicao.html         # Lista de eleições
+ ┃     ┣ 📜 resultados.html             # Resultados eleitorais
+ ┃     ┣ 📜 votacao_eleicao.html        # Interface de votação específica
+ ┃     ┗ 📜 votacao.html                # Interface de votação geral
+ ┃
+ ┣ 📂 static/                    # Assets estáticos
+ ┃ ┣ 📂 css/
+ ┃ ┃ ┣ 📜 style.css              # Estilos globais
+ ┃ ┃ ┣ 📜 cadastro-chapa.css     # Estilos de cadastro
+ ┃ ┃ ┣ 📜 acesso_votacao.css     # Estilos de acesso
+ ┃ ┃ ┣ 📜 confirmar_voto.css     # Estilos de confirmação
+ ┃ ┃ ┣ 📜 log-in.css             # Estilos de login
+ ┃ ┃ ┣ 📜 resultados.css         # Estilos de resultados
+ ┃ ┃ ┗ 📜 votacao.css            # Estilos de votação
+ ┃ ┣ 📂 js/
+ ┃ ┃ ┣ 📜 scripts.js             # JavaScript principal
+ ┃ ┃ ┣ 📜 acesso_votacao.js      # JS de acesso à votação
+ ┃ ┃ ┣ 📜 form_eleicao.js        # JS de formulários
+ ┃ ┃ ┣ 📜 javascript-index.js    # JS da página inicial
+ ┃ ┃ ┣ 📜 register.js            # JS de registro
+ ┃ ┃ ┗ 📜 votacao.js             # JS de votação
+ ┃ ┗ 📂 images/                  # Recursos gráficos
+ ┃
+ ┣ 📂 media/                     # Conteúdo dinâmico
+ ┃ ┣ 📂 chapas/                  # Imagens das chapas
+ ┃ ┗ 📂 documentos/              # Documentos oficiais
+ ┃
+ ┗ 📂 templates/                 # Templates globais
+   ┣ 📜 base.html                # Layout principal
+   ┗ 📜 index.html               # Página inicial

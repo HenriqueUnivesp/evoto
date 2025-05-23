@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultados - {{ eleicao.titulo }}{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <style>
+        .results-card {
+            max-width: 900px;
+            margin: 30px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .election-info {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #e9f7fe;
+            border-radius: 8px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .results-table th, 
+        .results-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .results-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .chapa-number {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .vote-count {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .vote-bar {
+            height: 20px;
+            background-color: #007bff;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        
+        .winner {
+            background-color: #d4edda;
+        }
+        
+        .winner .chapa-name {
+            font-weight: bold;
+            color: #155724;
+        }
+        
+        .winner-badge {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .eleicao-status-info {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        
+        .status-em_andamento {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+        
+        .status-finalizada {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="results-card">
+        <div class="card-header">
+            Resultados da Eleição: {{ eleicao.titulo }}
+        </div>
+        <div class="card-body">
+            <div class="election-info">
+                <h3>Informações da Eleição</h3>
+                <p><strong>Título:</strong> {{ eleicao.titulo }}</p>
+                <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                <p><strong>Período:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }} até {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+                <p><strong>Status:</strong> {{ eleicao.get_status_display }}</p>
+            </div>
+            
+            <div class="eleicao-status-info status-{{ eleicao.status }}">
+                {% if eleicao.status == 'em_andamento' %}
+                    <h4>Atenção: Eleição em Andamento</h4>
+                    <p>Esta eleição ainda está em andamento. Os resultados mostrados são parciais e podem mudar até o encerramento da votação.</p>
+                {% elif eleicao.status == 'finalizada' %}
+                    <h4>Eleição Finalizada</h4>
+                    <p>Esta eleição já foi finalizada. Os resultados mostrados são definitivos.</p>
+                {% endif %}
+            </div>
+            
+            {% if total_votos > 0 %}
+                <h3>Resultado da Votação</h3>
+                <p><strong>Total de votos: {{ total_votos }}</strong></p>
+                
+                <div class="table-responsive">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Chapa</th>
+                                <th>Votos</th>
+                                <th width="30%">Percentual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chapa in chapas %}
+                                <tr {% if forloop.first and eleicao.status == 'finalizada' %}class="winner"{% endif %}>
+                                    <td>
+                                        <span class="chapa-number">{{ chapa.numero }}</span>
+                                        <span class="chapa-name">{{ chapa.nome }}</span>
+                                        {% if forloop.first and eleicao.status == 'finalizada' %}
+                                            <span class="winner-badge">Vencedor</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="vote-count">{{ chapa.total_votos }}</td>
+                                    <td>
+                                        <div class="vote-bar" style="width: {% widthratio chapa.total_votos total_votos 100 %}%;"></div>
+                                        <span class="vote-percentage">{% widthratio chapa.total_votos total_votos 100 %}%</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <p>Ainda não há votos registrados para esta eleição.</p>
+                </div>
+            {% endif %}
+            
+            <div class="d-flex justify-content-center mt-4">
+                <a href="{% url 'election:acesso_votacao' %}" class="btn btn-primary">Voltar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

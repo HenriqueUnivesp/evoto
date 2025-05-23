@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel do Sistema - Eleição Grêmio Estudantil{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/acesso_votacao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="welcome-message">
+    <h2>Bem-vindo(a) ao Painel do Sistema de Eleição</h2>
+    <p>Este é o seu painel de controle para acompanhar e participar das eleições do Grêmio Estudantil. Aqui você pode:</p>
+    <ul>
+        <li>Visualizar eleições em andamento e próximas</li>
+        {% if user.tipo_usuario == 'aluno' %}
+            <li>Participar da votação durante o período eleitoral</li>
+        {% endif %}
+        <li>Consultar resultados de eleições passadas</li>
+        {% if user.is_staff or user.tipo_usuario == 'professor' or user.is_superuser %}
+            <li>Gerenciar eleições e chapas</li>
+        {% endif %}
+    </ul>
+</div>
+
+{% if user.is_staff or user.tipo_usuario == 'professor' or user.is_superuser %}
+<div class="admin-actions">
+    <a href="{% url 'election:criar_eleicao' %}" class="btn btn-success">Criar Nova Eleição</a>
+    <a href="{% url 'election:listar_eleicoes' %}" class="btn btn-primary">Gerenciar Todas as Eleições</a>
+</div>
+{% endif %}
+
+{% if eleicoes_ativas %}
+    <h3 class="section-header">Eleições em Andamento</h3>
+    <div class="row">
+        {% for eleicao in eleicoes_ativas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card eleicao-card">
+                    <div class="card-header">
+                        {{ eleicao.titulo }}
+                        <span class="eleicao-status status-{{ eleicao.status }}">{{ eleicao.get_status_display }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                        <p><strong>Período:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }} até {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+
+                        <div class="actions-container">
+                            {% if user.tipo_usuario == 'aluno' %}
+                                <a href="{% url 'election:votacao_eleicao' eleicao.id %}" class="btn btn-primary">Votar</a>
+                            {% endif %}
+                            <a href="{% url 'election:resultados' eleicao.id %}" class="btn btn-info">Ver Resultados</a>
+                            {% if user.is_staff or user.tipo_usuario == 'professor' or user.is_superuser %}
+                                <a href="{% url 'election:gerenciar_chapas' eleicao.id %}" class="btn btn-warning">Gerenciar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Não há eleições em andamento no momento.
+    </div>
+{% endif %}
+
+{% if eleicoes_proximas %}
+    <h3 class="section-header">Próximas Eleições</h3>
+    <div class="row">
+        {% for eleicao in eleicoes_proximas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card eleicao-card">
+                    <div class="card-header">
+                        {{ eleicao.titulo }}
+                        <span class="eleicao-status status-{{ eleicao.status }}">{{ eleicao.get_status_display }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                        <p><strong>Início:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }}</p>
+                        <p><strong>Término:</strong> {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+
+                        <div class="actions-container">
+                            {% if user.is_staff or user.tipo_usuario == 'professor' or user.is_superuser %}
+                                <a href="{% url 'election:gerenciar_chapas' eleicao.id %}" class="btn btn-outline-secondary">Gerenciar Chapas</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if not eleicoes_ativas and not eleicoes_proximas %}
+    <div class="alert alert-warning">
+        Não há eleições programadas no momento. Fique atento para as próximas eleições!
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {% load static %}
+    <script src="{% static 'js/acesso_votacao.js' %}"></script>
+{% endblock %}

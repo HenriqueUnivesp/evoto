@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Eleições - Sistema de Eleição{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Eleições Cadastradas</h2>
+    
+    <a href="{% url 'election:criar_eleicao' %}" class="btn btn-primary mb-3">
+        Criar Nova Eleição
+    </a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Tipo de Eleição</th>
+                <th>Data de Início</th>
+                <th>Data de Término</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eleicao in eleicoes %}
+            <tr>
+                <td>{{ eleicao.titulo }}</td>
+                <td>{{ eleicao.tipo_eleicao.nome }}</td>
+                <td>{{ eleicao.data_inicio }}</td>
+                <td>{{ eleicao.data_fim }}</td>
+                <td>{{ eleicao.get_status_display }}</td>
+                <td>
+                    {% if eleicao.esta_em_andamento %}
+                        <a href="{% url 'election:votacao_eleicao' eleicao.id %}" class="btn btn-sm btn-success">
+                            Votar
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'election:resultados' eleicao.id %}" class="btn btn-sm btn-info">
+                        Resultados
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Nenhuma eleição cadastrada</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+/* Estilos de acessibilidade para o sistema E-Voto */
+
+/* Modo de alto contraste */
+.high-contrast {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.high-contrast .card {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 1px solid #fff !important;
+}
+
+.high-contrast .card-header {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.high-contrast .btn-primary {
+    background-color: #0066CC !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+.high-contrast .btn-success {
+    background-color: #008000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+.high-contrast .btn-info {
+    background-color: #0099CC !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+.high-contrast .btn-warning {
+    background-color: #FF9900 !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+}
+
+.high-contrast a {
+    color: #00CCFF !important;
+    text-decoration: underline !important;
+}
+
+.high-contrast .navbar {
+    background-color: #333 !important;
+}
+
+.high-contrast .navbar-dark .navbar-nav .nav-link {
+    color: #fff !important;
+}
+
+/* Tamanho de texto ajustável */
+.font-size-normal {
+    font-size: 1rem !important;
+}
+
+.font-size-large {
+    font-size: 1.2rem !important;
+}
+
+.font-size-larger {
+    font-size: 1.4rem !important;
+}
+
+/* Foco aprimorado para navegação por teclado */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+    outline: 3px solid #4d90fe !important;
+    outline-offset: 2px !important;
+}
+
+/* Espaçamento melhorado para elementos interativos */
+.accessible-spacing button,
+.accessible-spacing .btn,
+.accessible-spacing a.btn {
+    margin: 0.5rem 0;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Melhorias para formulários */
+.accessible-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.accessible-form input,
+.accessible-form select,
+.accessible-form textarea {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.accessible-form input:focus,
+.accessible-form select:focus,
+.accessible-form textarea:focus {
+    border-color: #4d90fe;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(77, 144, 254, 0.5);
+}
+
+/* Mensagens de erro acessíveis */
+.accessible-form .error-message {
+    color: #d9534f;
+    background-color: #f9e4e4;
+    border: 1px solid #d9534f;
+    padding: 0.5rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+/* Barra de acessibilidade */
+.accessibility-bar {
+    background-color: #f8f9fa;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.accessibility-bar button {
+    margin-right: 0.5rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.accessibility-bar button:hover {
+    background-color: #e9ecef;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Ajustes para leitor de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Ícones de acessibilidade */
+.accessibility-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+}

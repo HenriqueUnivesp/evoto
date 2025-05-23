@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Acessibilidade - Sistema de Eleição Grêmio Estudantil{% endblock %}
+
+{% block content %}
+<div class="container accessible-spacing">
+    <div class="card">
+        <div class="card-header">
+            <h1>Recursos de Acessibilidade</h1>
+        </div>
+        <div class="card-body">
+            <p class="lead">O Sistema de Eleição do Grêmio Estudantil foi projetado para ser acessível a todos os usuários, independentemente de suas habilidades ou limitações.</p>
+            
+            <section id="recursos-visuais" aria-labelledby="recursos-visuais-titulo">
+                <h2 id="recursos-visuais-titulo">Recursos Visuais</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Alto Contraste</h3>
+                        <p>O modo de alto contraste melhora a legibilidade para usuários com baixa visão.</p>
+                        <p><strong>Como ativar:</strong> Clique no botão "Alto Contraste" na barra de acessibilidade no topo da página ou use o atalho <kbd>Alt</kbd> + <kbd>C</kbd>.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Tamanho de Fonte Ajustável</h3>
+                        <p>Você pode aumentar o tamanho da fonte para facilitar a leitura.</p>
+                        <p><strong>Como ajustar:</strong> Clique nos botões A, A+ ou A++ na barra de acessibilidade ou use o atalho <kbd>Alt</kbd> + <kbd>A</kbd> para alternar entre os tamanhos.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="leitores-tela" aria-labelledby="leitores-tela-titulo">
+                <h2 id="leitores-tela-titulo">Suporte a Leitores de Tela</h2>
+                <p>O sistema é totalmente compatível com leitores de tela como NVDA, JAWS e VoiceOver.</p>
+                <ul>
+                    <li>Todos os elementos interativos possuem rótulos adequados</li>
+                    <li>Imagens têm textos alternativos descritivos</li>
+                    <li>A estrutura da página segue uma hierarquia lógica de cabeçalhos</li>
+                    <li>Elementos dinâmicos são anunciados apropriadamente</li>
+                </ul>
+                <p><strong>Leitura de Página:</strong> Clique no botão "Ler Página" na barra de acessibilidade ou use o atalho <kbd>Alt</kbd> + <kbd>R</kbd> para ouvir o conteúdo da página atual.</p>
+            </section>
+            
+            <section id="navegacao-teclado" aria-labelledby="navegacao-teclado-titulo">
+                <h2 id="navegacao-teclado-titulo">Navegação por Teclado</h2>
+                <p>Todo o sistema pode ser utilizado apenas com o teclado, sem necessidade de mouse.</p>
+                <h3>Atalhos de Teclado Globais</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Atalho</th>
+                                <th>Função</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>Tab</kbd></td>
+                                <td>Navegar entre elementos interativos</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Shift</kbd> + <kbd>Tab</kbd></td>
+                                <td>Navegar para o elemento anterior</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Enter</kbd> ou <kbd>Espaço</kbd></td>
+                                <td>Ativar botões ou links</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>C</kbd></td>
+                                <td>Alternar modo de alto contraste</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>A</kbd></td>
+                                <td>Ajustar tamanho da fonte</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>H</kbd></td>
+                                <td>Ir para a página inicial</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>V</kbd></td>
+                                <td>Ir para a página de votação</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>R</kbd></td>
+                                <td>Ler conteúdo da página</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Atalhos na Página de Votação</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Atalho</th>
+                                <th>Função</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>1</kbd> a <kbd>9</kbd></td>
+                                <td>Selecionar chapa pelo número</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Atalhos na Página de Confirmação de Voto</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Atalho</th>
+                                <th>Função</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>C</kbd></td>
+                                <td>Cancelar e voltar para a página de votação</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> + <kbd>S</kbd></td>
+                                <td>Marcar a caixa de confirmação e confirmar o voto</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="recursos-adicionais" aria-labelledby="recursos-adicionais-titulo">
+                <h2 id="recursos-adicionais-titulo">Recursos Adicionais</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Link para Pular para o Conteúdo</h3>
+                        <p>Um link invisível no topo da página permite que usuários de teclado pulem diretamente para o conteúdo principal, evitando a navegação repetitiva pelo cabeçalho.</p>
+                        <p><strong>Como usar:</strong> Pressione <kbd>Tab</kbd> ao carregar qualquer página para revelar o link "Pular para o conteúdo principal".</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Formulários Acessíveis</h3>
+                        <p>Todos os formulários do sistema foram projetados para serem acessíveis:</p>
+                        <ul>
+                            <li>Rótulos claros e associados aos campos</li>
+                            <li>Instruções explícitas</li>
+                            <li>Mensagens de erro descritivas</li>
+                            <li>Foco visual aprimorado</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="conformidade" aria-labelledby="conformidade-titulo">
+                <h2 id="conformidade-titulo">Conformidade com Padrões</h2>
+                <p>O Sistema de Eleição do Grêmio Estudantil foi desenvolvido seguindo as diretrizes de acessibilidade WCAG 2.1 (Web Content Accessibility Guidelines) nível AA.</p>
+                <p>Estamos comprometidos em melhorar continuamente a acessibilidade do sistema. Se você encontrar alguma dificuldade ou tiver sugestões, por favor entre em contato com a equipe de suporte.</p>
+            </section>
+            
+            <div class="mt-4">
+                <a href="{% url 'election:acesso_votacao' %}" class="btn btn-primary">Voltar para o Painel Principal</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

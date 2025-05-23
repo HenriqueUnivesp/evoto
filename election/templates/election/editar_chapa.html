@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if modo_edicao %}Editar{% else %}Cadastrar{% endif %} Chapa - Sistema de Eleição{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/form_eleicao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{% if modo_edicao %}Editar{% else %}Cadastrar{% endif %} Chapa para {{ eleicao.titulo }}</h4>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Informações da Chapa</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.nome.id_for_label }}" class="required-label">{{ form.nome.label }}</label>
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.numero.id_for_label }}" class="required-label">{{ form.numero.label }}</label>
+                                {{ form.numero }}
+                                {% if form.numero.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.numero.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.slogan.id_for_label }}" class="required-label">{{ form.slogan.label }}</label>
+                        {{ form.slogan }}
+                        {% if form.slogan.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.slogan.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.imagem.id_for_label }}">{{ form.imagem.label }}</label>
+                        {{ form.imagem }}
+                        {% if form.imagem.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.imagem.errors }}
+                        </div>
+                        {% endif %}
+                        {% if chapa.imagem %}
+                        <p class="mt-2">Imagem atual: <a href="{{ chapa.imagem.url }}" target="_blank">Ver imagem</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Candidato à Presidência</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_nome.id_for_label }}" class="required-label">{{ form.presidente_nome.label }}</label>
+                                {{ form.presidente_nome }}
+                                {% if form.presidente_nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_serie.id_for_label }}" class="required-label">{{ form.presidente_serie.label }}</label>
+                                {{ form.presidente_serie }}
+                                {% if form.presidente_serie.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_serie.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_matricula.id_for_label }}" class="required-label">{{ form.presidente_matricula.label }}</label>
+                                {{ form.presidente_matricula }}
+                                {% if form.presidente_matricula.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_matricula.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_email.id_for_label }}" class="required-label">{{ form.presidente_email.label }}</label>
+                                {{ form.presidente_email }}
+                                {% if form.presidente_email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.presidente_telefone.id_for_label }}" class="required-label">{{ form.presidente_telefone.label }}</label>
+                        {{ form.presidente_telefone }}
+                        {% if form.presidente_telefone.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.presidente_telefone.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Vice-Presidente (Opcional)</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_nome.id_for_label }}">{{ form.vice_nome.label }}</label>
+                                {{ form.vice_nome }}
+                                {% if form.vice_nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_serie.id_for_label }}">{{ form.vice_serie.label }}</label>
+                                {{ form.vice_serie }}
+                                {% if form.vice_serie.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_serie.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_matricula.id_for_label }}">{{ form.vice_matricula.label }}</label>
+                                {{ form.vice_matricula }}
+                                {% if form.vice_matricula.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_matricula.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_email.id_for_label }}">{{ form.vice_email.label }}</label>
+                                {{ form.vice_email }}
+                                {% if form.vice_email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Propostas e Documentação</h5>
+                    <div class="form-group">
+                        <label for="{{ form.propostas.id_for_label }}" class="required-label">{{ form.propostas.label }}</label>
+                        {{ form.propostas }}
+                        {% if form.propostas.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.propostas.errors }}
+                        </div>
+                        {% endif %}
+                        {% if form.propostas.help_text %}
+                        <small class="form-text text-muted">{{ form.propostas.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.documento_assinaturas.id_for_label }}" class="required-label">{{ form.documento_assinaturas.label }}</label>
+                        {{ form.documento_assinaturas }}
+                        {% if form.documento_assinaturas.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.documento_assinaturas.errors }}
+                        </div>
+                        {% endif %}
+                        {% if form.documento_assinaturas.help_text %}
+                        <small class="form-text text-muted">{{ form.documento_assinaturas.help_text }}</small>
+                        {% endif %}
+                        {% if chapa.documento_assinaturas %}
+                        <p class="mt-2">Documento atual: <a href="{{ chapa.documento_assinaturas.url }}" target="_blank">Ver documento</a></p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.comentarios.id_for_label }}">{{ form.comentarios.label }}</label>
+                        {{ form.comentarios }}
+                        {% if form.comentarios.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.comentarios.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-check">
+                        {{ form.aceite_termos }}
+                        <label class="form-check-label required-label" for="{{ form.aceite_termos.id_for_label }}">
+                            {{ form.aceite_termos.label }}
+                        </label>
+                        {% if form.aceite_termos.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.aceite_termos.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="submit-container">
+                    <a href="{% url 'election:gerenciar_chapas' eleicao.id %}" class="btn btn-secondary">Voltar</a>
+                    <button type="submit" class="btn btn-primary">{% if modo_edicao %}Atualizar{% else %}Cadastrar{% endif %} Chapa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

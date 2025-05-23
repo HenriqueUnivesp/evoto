@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if confirmar_exclusao %}
+        Confirmar Exclusão de Eleição
+    {% elif gerenciar_chapas %}
+        Gerenciar Chapas - {{ eleicao.titulo }}
+    {% else %}
+        Criar Nova Eleição
+    {% endif %} 
+    - Sistema de Eleição
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/form_eleicao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if confirmar_exclusao %}
+    <!-- Tela de confirmação de exclusão -->
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Exclusão de Eleição</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <h5>Atenção!</h5>
+                <p>Você está prestes a excluir permanentemente a eleição <strong>{{ eleicao.titulo }}</strong>.</p>
+                <p>Esta ação não pode ser desfeita. Todos os dados relacionados a esta eleição, incluindo chapas e votos, serão perdidos.</p>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Informações da Eleição</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Título:</strong> {{ eleicao.titulo }}</p>
+                            <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                            <p><strong>Status:</strong> {{ eleicao.get_status_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Data de Início:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Data de Término:</strong> {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Criado por:</strong> {{ eleicao.criado_por.get_full_name|default:eleicao.criado_por.username }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p><strong>Descrição:</strong> {{ eleicao.descricao }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="submit-container">
+                    <a href="{% url 'election:gerenciar_chapas' eleicao.id %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% elif not gerenciar_chapas %}
+    <!-- Formulário de criação de eleição -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Criar Nova Eleição</h4>
+        </div>
+        <div class="card-body">
+            <div class="instructions alert alert-info">
+                <h5>Instruções para criar uma eleição:</h5>
+                <p>Configure abaixo os detalhes da eleição escolar que deseja criar. Depois de configurar a eleição básica, você poderá adicionar chapas a esta eleição.</p>
+            </div>
+
+            <form id="criar-eleicao-form" method="post" action="{% url 'election:criar_eleicao' %}">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Informações da Eleição</h5>
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.titulo.id_for_label }}" class="required-label">{{ form.titulo.label }}</label>
+                        {{ form.titulo }}
+                        {% if form.titulo.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.titulo.errors }}
+                        </div>
+                        {% endif %}
+                        {% if form.titulo.help_text %}
+                        <small class="form-text text-muted">{{ form.titulo.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.descricao.id_for_label }}" class="required-label">{{ form.descricao.label }}</label>
+                        {{ form.descricao }}
+                        {% if form.descricao.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.descricao.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.tipo_eleicao_nome.id_for_label }}" class="required-label">{{ form.tipo_eleicao_nome.label }}</label>
+                        {{ form.tipo_eleicao_nome }}
+                        {% if form.tipo_eleicao_nome.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.tipo_eleicao_nome.errors }}
+                        </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Exemplos: Grêmio Estudantil, Representante de Classe, Conselho Escolar</small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.data_inicio.id_for_label }}" class="required-label">{{ form.data_inicio.label }}</label>
+                                {{ form.data_inicio }}
+                                {% if form.data_inicio.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.data_inicio.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.data_fim.id_for_label }}" class="required-label">{{ form.data_fim.label }}</label>
+                                {{ form.data_fim }}
+                                {% if form.data_fim.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.data_fim.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="form-section-title">Configurações Adicionais</h5>
+                    
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="termos-aceite" required>
+                        <label class="form-check-label required-label" for="termos-aceite">
+                            Declaro que todas as informações fornecidas são verdadeiras e me comprometo a seguir as regras estabelecidas para esta eleição.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="submit-container">
+                    <a href="{% url 'election:listar_eleicoes' %}" class="btn btn-danger">Cancelar</a>
+                    <button type="submit" class="btn btn-success btn-lg">Criar Eleição</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="mt-4 alert alert-warning">
+        <p><strong>Nota:</strong> Após criar a eleição, você poderá adicionar as chapas participantes através da página de gerenciamento de chapas.</p>
+    </div>
+    {% endif %}
+
+    {% if gerenciar_chapas %}
+    <!-- Seção de Gerenciamento de Chapas -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gerenciar Chapas - "{{ eleicao.titulo }}"</h2>
+        <div>
+            <a href="{% url 'election:listar_eleicoes' %}" class="btn btn-secondary">Voltar às Eleições</a>
+            <a href="{% url 'election:excluir_eleicao' eleicao.id %}" class="btn btn-danger">Excluir Eleição</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Informações da Eleição</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Título:</strong> {{ eleicao.titulo }}</p>
+                    <p><strong>Tipo:</strong> {{ eleicao.tipo_eleicao.nome }}</p>
+                    <p><strong>Status:</strong> {{ eleicao.get_status_display }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Data de Início:</strong> {{ eleicao.data_inicio|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Data de Término:</strong> {{ eleicao.data_fim|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Chapas Cadastradas:</strong> {{ chapas|length }}</p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <p><strong>Descrição:</strong> {{ eleicao.descricao }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Chapas -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Chapas Cadastradas</h4>
+        </div>
+        <div class="card-body">
+            {% if chapas %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Nome</th>
+                            <th>Presidente</th>
+                            <th>Vice-Presidente</th>
+                            <th>Data de Cadastro</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chapa in chapas %}
+                        <tr>
+                            <td>{{ chapa.numero }}</td>
+                            <td>{{ chapa.nome }}</td>
+                            <td>{{ chapa.presidente_nome }}</td>
+                            <td>{{ chapa.vice_nome }}</td>
+                            <td>{{ chapa.data_cadastro|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'election:editar_chapa' chapa.id %}" class="btn btn-sm btn-warning">Editar</a>
+                                    <a href="{% url 'election:remover_chapa' chapa.id %}" class="btn btn-sm btn-danger">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <p>Nenhuma chapa cadastrada para esta eleição ainda.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Formulário para adicionar nova chapa -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Adicionar Nova Chapa</h4>
+        </div>
+        <div class="card-body">
+            <form id="cadastro-chapa-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Informações da Chapa -->
+                <div class="form-section">
+                    <h5 class="form-section-title">Informações da Chapa</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.nome.id_for_label }}" class="required-label">{{ form.nome.label }}</label>
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.numero.id_for_label }}" class="required-label">{{ form.numero.label }}</label>
+                                {{ form.numero }}
+                                {% if form.numero.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.numero.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.slogan.id_for_label }}" class="required-label">{{ form.slogan.label }}</label>
+                        {{ form.slogan }}
+                        {% if form.slogan.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.slogan.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.imagem.id_for_label }}">{{ form.imagem.label }}</label>
+                        {{ form.imagem }}
+                        {% if form.imagem.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.imagem.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Candidato à Presidência -->
+                <div class="form-section">
+                    <h5 class="form-section-title">Candidato à Presidência</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_nome.id_for_label }}" class="required-label">{{ form.presidente_nome.label }}</label>
+                                {{ form.presidente_nome }}
+                                {% if form.presidente_nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_serie.id_for_label }}" class="required-label">{{ form.presidente_serie.label }}</label>
+                                {{ form.presidente_serie }}
+                                {% if form.presidente_serie.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_serie.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_matricula.id_for_label }}" class="required-label">{{ form.presidente_matricula.label }}</label>
+                                {{ form.presidente_matricula }}
+                                {% if form.presidente_matricula.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_matricula.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.presidente_email.id_for_label }}" class="required-label">{{ form.presidente_email.label }}</label>
+                                {{ form.presidente_email }}
+                                {% if form.presidente_email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.presidente_email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.presidente_telefone.id_for_label }}" class="required-label">{{ form.presidente_telefone.label }}</label>
+                        {{ form.presidente_telefone }}
+                        {% if form.presidente_telefone.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.presidente_telefone.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Vice-Presidente -->
+                <div class="form-section">
+                    <h5 class="form-section-title">Vice-Presidente</h5>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_nome.id_for_label }}" class="required-label">{{ form.vice_nome.label }}</label>
+                                {{ form.vice_nome }}
+                                {% if form.vice_nome.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_serie.id_for_label }}" class="required-label">{{ form.vice_serie.label }}</label>
+                                {{ form.vice_serie }}
+                                {% if form.vice_serie.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_serie.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_matricula.id_for_label }}" class="required-label">{{ form.vice_matricula.label }}</label>
+                                {{ form.vice_matricula }}
+                                {% if form.vice_matricula.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_matricula.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="{{ form.vice_email.id_for_label }}" class="required-label">{{ form.vice_email.label }}</label>
+                                {{ form.vice_email }}
+                                {% if form.vice_email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.vice_email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Propostas e Documentação -->
+                <div class="form-section">
+                    <h5 class="form-section-title">Propostas e Documentação</h5>
+                    <div class="form-group">
+                        <label for="{{ form.propostas.id_for_label }}" class="required-label">{{ form.propostas.label }}</label>
+                        {{ form.propostas }}
+                        {% if form.propostas.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.propostas.errors }}
+                        </div>
+                        {% endif %}
+                        {% if form.propostas.help_text %}
+                        <small class="form-text text-muted">{{ form.propostas.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.documento_assinaturas.id_for_label }}" class="required-label">{{ form.documento_assinaturas.label }}</label>
+                        {{ form.documento_assinaturas }}
+                        {% if form.documento_assinaturas.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.documento_assinaturas.errors }}
+                        </div>
+                        {% endif %}
+                        {% if form.documento_assinaturas.help_text %}
+                        <small class="form-text text-muted">{{ form.documento_assinaturas.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    {% if form.comentarios %}
+                    <div class="form-group">
+                        <label for="{{ form.comentarios.id_for_label }}">{{ form.comentarios.label }}</label>
+                        {{ form.comentarios }}
+                        {% if form.comentarios.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.comentarios.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.aceite_termos %}
+                    <div class="form-check">
+                        {{ form.aceite_termos }}
+                        <label class="form-check-label required-label" for="{{ form.aceite_termos.id_for_label }}">
+                            {{ form.aceite_termos.label }}
+                        </label>
+                        {% if form.aceite_termos.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.aceite_termos.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="btn btn-primary">Adicionar Chapa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/form_eleicao.js' %}"></script>
+{% endblock %}
+

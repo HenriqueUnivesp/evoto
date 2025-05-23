@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema de Votação - {{ eleicao.titulo }}{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/votacao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container main-content accessible-spacing">
+    <div class="card" role="region" aria-labelledby="votacao-titulo">
+        <div class="card-header">
+            <h2 id="votacao-titulo">Votação para {{ eleicao.titulo }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="instructions" role="region" aria-labelledby="instrucoes-titulo">
+                <h3 id="instrucoes-titulo">Como votar:</h3>
+                <p>Siga as instruções abaixo para registrar seu voto:</p>
+                <ul>
+                    <li>Você está logado como: <strong>{{ user.username }}</strong></li>
+                    <li>Analise as propostas de cada chapa</li>
+                    <li>Clique no botão "Votar" da chapa escolhida ou use os números do teclado (1-9) para selecionar uma chapa pelo número</li>
+                    <li>Confirme seu voto na tela seguinte</li>
+                    <li>Você só pode votar uma única vez</li>
+                    <li>Seu voto é sigiloso e não poderá ser alterado após a confirmação</li>
+                </ul>
+                <p class="mt-3">Atalhos de teclado: pressione Alt+R para ouvir a descrição das chapas, ou pressione o número correspondente à chapa desejada.</p>
+            </div>
+
+            <div class="timer" role="region" aria-labelledby="timer-titulo">
+                <h3 id="timer-titulo">Tempo restante para votação:</h3>
+                <div class="timer-count" data-data-fim="{{ eleicao.data_fim|date:'c' }}" aria-live="polite">
+                    {% if tempo_restante %}
+                        <span aria-label="{{ tempo_restante.days }} dias, {{ horas }} horas, {{ minutos }} minutos e {{ segundos }} segundos restantes">
+                            {{ tempo_restante.days }}d {{ horas|stringformat:"02d" }}:{{ minutos|stringformat:"02d" }}:{{ segundos|stringformat:"02d" }}
+                        </span>
+                    {% else %}
+                        Votação encerrada
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row g-2">
+                {% for chapa in chapas %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-3">
+                    <div class="card h-100" role="region" aria-labelledby="chapa-{{ chapa.numero }}-titulo">
+                        {% if chapa.imagem %}
+                            <img src="{{ chapa.imagem.url }}" alt="Foto da Chapa {{ chapa.nome }}" class="card-img-top">
+                        {% else %}
+                            <img src="{% static 'img/default-chapa.png' %}" alt="Imagem padrão da Chapa {{ chapa.nome }}" class="card-img-top">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="badge bg-secondary rounded-pill py-1 px-3" aria-label="Chapa número {{ chapa.numero }}">{{ chapa.numero }}</span>
+                            </div>
+                            <h5 class="card-title" id="chapa-{{ chapa.numero }}-titulo">{{ chapa.nome }}</h5>
+                            <div class="card-text mb-2">
+                                <p><strong>Propostas:</strong> {{ chapa.propostas|truncatechars:150 }}</p>
+                                <div class="sr-only">
+                                    <p>Presidente: {{ chapa.presidente_nome }}</p>
+                                    {% if chapa.vice_nome %}
+                                    <p>Vice-presidente: {{ chapa.vice_nome }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <form method="post" action="{% url 'election:confirmar_voto' eleicao.id chapa.id %}" class="mt-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary w-100" aria-label="Votar na chapa {{ chapa.numero }} - {{ chapa.nome }}" data-chapa-numero="{{ chapa.numero }}">Votar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-warning" role="alert">
+                        <p>Não há chapas cadastradas para esta eleição. Entre em contato com a coordenação.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {% load static %}
+    <script src="{% static 'js/votacao.js' %}"></script>
+    <script>
+        // Script específico para acessibilidade na página de votação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adiciona suporte para seleção de chapas por números do teclado
+            document.addEventListener('keydown', function(event) {
+                // Verifica se a tecla pressionada é um número entre 1 e 9
+                if (!isNaN(parseInt(event.key)) && parseInt(event.key) > 0 && parseInt(event.key) <= 9) {
+                    const chapaNum = parseInt(event.key);
+                    const botaoVotar = document.querySelector(`button[data-chapa-numero="${chapaNum}"]`);
+                    
+                    if (botaoVotar) {
+                        // Foca no botão da chapa correspondente
+                        botaoVotar.focus();
+                        
+                        // Anuncia para leitores de tela
+                        const announcer = document.getElementById('screen-reader-announcer');
+                        if (announcer) {
+                            const chapaTitle = document.getElementById(`chapa-${chapaNum}-titulo`);
+                            const chapaNome = chapaTitle ? chapaTitle.textContent : `Chapa ${chapaNum}`;
+                            announcer.textContent = `Chapa ${chapaNum} selecionada: ${chapaNome}`;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

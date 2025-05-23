@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Fundo -->
+  <rect width="400" height="400" fill="#ffccbc"/>
+  
+  <!-- Cabelo -->
+  <path d="M120 150 Q140 100 200 100 Q260 100 280 150 Q290 200 280 250 L280 260 L120 260 L120 250 Q110 200 120 150" fill="#543c16"/>
+  
+  <!-- Rosto -->
+  <circle cx="200" cy="210" r="80" fill="#ffe0b2"/>
+  
+  <!-- Olhos -->
+  <ellipse cx="170" cy="190" rx="10" ry="12" fill="white"/>
+  <ellipse cx="230" cy="190" rx="10" ry="12" fill="white"/>
+  <circle cx="170" cy="190" r="5" fill="#3f2a14"/>
+  <circle cx="230" cy="190" r="5" fill="#3f2a14"/>
+  
+  <!-- Cílios -->
+  <line x1="160" y1="180" x2="158" y2="175" stroke="black" stroke-width="1"/>
+  <line x1="165" y1="178" x2="163" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="170" y1="178" x2="170" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="175" y1="178" x2="177" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="180" y1="180" x2="182" y2="175" stroke="black" stroke-width="1"/>
+  
+  <line x1="220" y1="180" x2="218" y2="175" stroke="black" stroke-width="1"/>
+  <line x1="225" y1="178" x2="223" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="230" y1="178" x2="230" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="235" y1="178" x2="237" y2="173" stroke="black" stroke-width="1"/>
+  <line x1="240" y1="180" x2="242" y2="175" stroke="black" stroke-width="1"/>
+  
+  <!-- Sobrancelhas -->
+  <path d="M155 168 Q170 160 185 168" stroke="#543c16" stroke-width="3" fill="none"/>
+  <path d="M215 168 Q230 160 245 168" stroke="#543c16" stroke-width="3" fill="none"/>
+  
+  <!-- Boca com batom -->
+  <path d="M180 230 Q200 245 220 230" fill="#e91e63"/>
+  
+  <!-- Cabelo na frente -->
+  <path d="M150 130 Q170 120 180 150" fill="#543c16"/>
+  <path d="M250 130 Q230 120 220 150" fill="#543c16"/>
+  
+  <!-- Brincos -->
+  <circle cx="130" cy="210" r="6" fill="#ff9800"/>
+  <circle cx="270" cy="210" r="6" fill="#ff9800"/>
+  
+  <!-- Colar -->
+  <path d="M150 290 Q200 310 250 290" stroke="#ff9800" stroke-width="5" fill="none"/>
+  
+  <!-- Blusa -->
+  <path d="M120 320 L150 270 Q170 290 200 300 Q230 290 250 270 L280 320" fill="#f06292"/>
+  
+  <!-- Nome do candidato -->
+  <rect x="100" y="340" width="200" height="40" rx="10" fill="#ff7043"/>
+  <text x="200" y="368" font-family="Arial" font-size="20" fill="white" text-anchor="middle">Ana Oliveira - 30</text>
+</svg>

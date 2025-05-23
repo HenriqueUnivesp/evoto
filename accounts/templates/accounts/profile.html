@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil - Sistema de Eleição Grêmio Estudantil{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/profile.css">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Meu Perfil</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Informações Pessoais -->
+                    <div class="col-lg-6 profile-section">
+                        <h4 class="mb-3">Informações Pessoais</h4>
+                        <table class="table">
+                            <tr>
+                                <th>Nome:</th>
+                                <td>{{ user.nome_completo }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nome de usuário:</th>
+                                <td>{{ user.username }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tipo de usuário:</th>
+                                <td>{{ user.get_tipo_usuario_display }}</td>
+                            </tr>
+                            {% if user.tipo_usuario == 'aluno' %}
+                                <tr>
+                                    <th>Matrícula:</th>
+                                    <td>{{ user.matricula }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Série/Turma:</th>
+                                    <td>{{ user.serie }}</td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <th>Data de cadastro:</th>
+                                <td>{{ user.data_cadastro|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Atividades -->
+                    <div class="col-lg-6 profile-section">
+                        <h4 class="mb-3">Atividades</h4>
+                        
+                        {% if user.tipo_usuario == 'aluno' %}
+                            <div class="card mb-3 activities-card border-info">
+                                <div class="card-header bg-info text-white py-2">
+                                    <h5 class="card-title mb-0">Participação em Eleições</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    {% if eleicoes_participadas %}
+                                        <ul class="list-group list-group-flush">
+                                            {% for eleicao in eleicoes_participadas %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ eleicao.titulo }}
+                                                    <span class="badge bg-primary rounded-pill">{{ eleicao.data_voto|date:"d/m/Y" }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <div class="p-3">
+                                            <p class="text-muted mb-0">Você ainda não participou de nenhuma eleição.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if user.is_staff or user.tipo_usuario != 'aluno' %}
+                            <div class="card activities-card border-success">
+                                <div class="card-header bg-success text-white py-2">
+                                    <h5 class="card-title mb-0">Administração</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-2">Você tem acesso aos recursos administrativos do sistema.</p>
+                                    <a href="{% url 'admin:index' %}" class="btn btn-sm btn-primary">Acessar Administração</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="/" class="btn btn-outline-primary">Voltar</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger">Sair</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

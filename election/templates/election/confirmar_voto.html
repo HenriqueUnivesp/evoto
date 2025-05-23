@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Voto - {{ eleicao.titulo }}{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/confirmar_voto.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adiciona suporte para atalhos de teclado na página de confirmação
+        document.addEventListener('keydown', function(event) {
+            // Alt + C: Cancelar
+            if (event.altKey && event.key === 'c') {
+                event.preventDefault();
+                document.querySelector('.cancel-button').click();
+            }
+            
+            // Alt + S: Submeter/Confirmar (após marcar o checkbox)
+            if (event.altKey && event.key === 's') {
+                event.preventDefault();
+                const checkbox = document.getElementById('id_confirmar_voto');
+                if (!checkbox.checked) {
+                    checkbox.checked = true;
+                    // Anuncia para leitores de tela
+                    const announcer = document.getElementById('screen-reader-announcer');
+                    if (announcer) {
+                        announcer.textContent = 'Caixa de confirmação marcada. Pressione Alt+S novamente para confirmar seu voto.';
+                    }
+                } else {
+                    document.querySelector('.confirm-button').click();
+                }
+            }
+            
+            // Espaço: Alternar checkbox quando está em foco
+            if (event.key === ' ' && document.activeElement === document.getElementById('id_confirmar_voto')) {
+                const checkbox = document.getElementById('id_confirmar_voto');
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+        
+        // Foca automaticamente no checkbox quando a página carrega
+        document.getElementById('id_confirmar_voto').focus();
+        
+        // Anuncia a página para leitores de tela
+        const announcer = document.getElementById('screen-reader-announcer');
+        if (announcer) {
+            const chapaNome = document.getElementById('chapa-nome').textContent;
+            announcer.textContent = `Página de confirmação de voto para a chapa ${chapaNome}. Pressione Tab para navegar pelos elementos da página. Use Alt+C para cancelar ou Alt+S para confirmar após marcar a caixa de confirmação.`;
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container accessible-spacing">
+    <div class="confirmation-card" role="region" aria-labelledby="confirmacao-titulo">
+        <div class="card-header">
+            <h2 id="confirmacao-titulo">Confirme seu voto para {{ eleicao.titulo }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="election-info" role="region" aria-labelledby="info-eleicao-titulo">
+                <h3 id="info-eleicao-titulo">Informações da Eleição</h3>
+                <p><strong>Eleição:</strong> {{ eleicao.titulo }}</p>
+                <p><strong>Período:</strong> <span aria-label="De {{ eleicao.data_inicio|date:'d de F de Y às H:i' }} até {{ eleicao.data_fim|date:'d de F de Y às H:i' }}">{{ eleicao.data_inicio|date:"d/m/Y H:i" }} até {{ eleicao.data_fim|date:"d/m/Y H:i" }}</span></p>
+                <p><strong>Eleitor:</strong> {{ user.get_full_name|default:user.username }}</p>
+            </div>
+            
+            <div class="chapa-details" role="region" aria-labelledby="chapa-detalhes-titulo">
+                <h3 id="chapa-detalhes-titulo" class="sr-only">Detalhes da Chapa Selecionada</h3>
+                {% if chapa.imagem %}
+                    <img src="{{ chapa.imagem.url }}" alt="Foto da Chapa {{ chapa.nome }}" class="chapa-image">
+                {% else %}
+                    <img src="{% static 'img/default-chapa.png' %}" alt="Imagem representativa da Chapa {{ chapa.nome }}" class="chapa-image">
+                {% endif %}
+                <div class="chapa-info">
+                    <div class="chapa-number" aria-label="Chapa número {{ chapa.numero }}">{{ chapa.numero }}</div>
+                    <h3 class="chapa-name" id="chapa-nome">{{ chapa.nome }}</h3>
+                    <p><strong>Slogan:</strong> {{ chapa.slogan }}</p>
+                    <p><strong>Presidente:</strong> {{ chapa.presidente_nome }}</p>
+                    {% if chapa.vice_nome %}
+                    <p><strong>Vice-Presidente:</strong> {{ chapa.vice_nome }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="warning-box" role="alert" aria-labelledby="atencao-titulo">
+                <h4 id="atencao-titulo">Atenção!</h4>
+                <p>Confirme seu voto com atenção. Após a confirmação:</p>
+                <ul>
+                    <li>Seu voto não poderá ser alterado</li>
+                    <li>Você não poderá votar novamente nesta eleição</li>
+                    <li>O voto é sigiloso e não poderá ser identificado individualmente</li>
+                </ul>
+            </div>
+            
+            <form method="post" action="" class="accessible-form">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+                
+                <div class="form-group form-check">
+                    <input type="checkbox" name="confirmar_voto" id="id_confirmar_voto" class="form-check-input" required aria-describedby="voto-confirmacao-desc" />
+                    <label for="id_confirmar_voto" class="form-check-label">
+                        Declaro que estou ciente que este é meu voto final e que não poderei alterá-lo.
+                    </label>
+                    <div id="voto-confirmacao-desc" class="sr-only">Marque esta caixa para confirmar que você entende que este voto é final e não poderá ser alterado.</div>
+                    {% if form.confirmar_voto.errors %}
+                    <div class="invalid-feedback d-block" role="alert">
+                        {{ form.confirmar_voto.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{% url 'election:votacao_eleicao' eleicao.id %}" class="cancel-button" aria-label="Cancelar e voltar para a página de votação">Cancelar</a>
+                    <button type="submit" class="confirm-button" aria-label="Confirmar meu voto para a chapa {{ chapa.numero }} - {{ chapa.nome }}">Confirmar meu voto</button>
+                </div>
+
+                <!-- Campo oculto para garantir que o formulário seja enviado corretamente -->
+                <input type="hidden" name="confirmar" value="true" />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

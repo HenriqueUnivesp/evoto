@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Votação - {{ eleicao.titulo }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/votacao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+    <div class="card">
+        <div class="card-header">
+            Votação para {{ eleicao.titulo }}
+        </div>
+        <div class="card-body">
+            <div class="instructions">
+                <h3>Como votar:</h3>
+                <p>Siga as instruções abaixo para registrar seu voto:</p>
+                <ul>
+                    <li>Você deve estar logado com seu número de matrícula</li>
+                    <li>Analise as propostas de cada candidato</li>
+                    <li>Clique no botão "Votar" do candidato escolhido</li>
+                    <li>Confirme seu voto na tela seguinte</li>
+                    <li>Você só pode votar uma única vez</li>
+                </ul>
+            </div>
+
+            <div class="timer">
+                <h3>Tempo restante para votação:</h3>
+                <div class="timer-count">
+                    {{ tempo_restante }}
+                </div>
+            </div>
+
+            <div class="candidate-list">
+                {% for chapa in chapas %}
+                <div class="candidate-card">
+                    <img src="{{ chapa.imagem.url }}" alt="Foto de {{ chapa.nome }}" class="candidate-img">
+                    <div class="candidate-info">
+                        <span class="candidate-number">{{ chapa.numero }}</span>
+                        <h3 class="candidate-name">{{ chapa.nome }}</h3>
+                        <p class="candidate-party">{{ chapa.slogan }}</p>
+                        <div class="candidate-proposals">
+                            <p><strong>Propostas:</strong> {{ chapa.propostas|truncatechars:200 }}</p>
+                        </div>
+                        <button class="vote-button" data-chapa-id="{{ chapa.id }}">Votar</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="confirmation-section" style="display: none;">
+        <div class="card-header">
+            Confirme seu voto
+        </div>
+        <div class="card-body">
+            <div class="vote-form">
+                <p style="margin: 20px 0; color: #555;">
+                    Você está votando para: <strong id="selected-candidate"></strong>
+                </p>
+                <div style="display: flex; justify-content: flex-start;">
+                    <button class="confirm-vote-btn">Confirmar Voto</button>
+                    <button class="cancel-btn">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const voteButtons = document.querySelectorAll('.vote-button');
+        const confirmationSection = document.getElementById('confirmation-section');
+        const selectedCandidateText = document.getElementById('selected-candidate');
+        const cancelButton = document.querySelector('.cancel-btn');
+
+        voteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const candidateCard = this.closest('.candidate-card');
+                const candidateName = candidateCard.querySelector('.candidate-name').textContent;
+                const candidateNumber = candidateCard.querySelector('.candidate-number').textContent;
+
+                selectedCandidateText.textContent = `${candidateName} (${candidateNumber})`;
+                confirmationSection.style.display = 'block';
+                window.scrollTo({
+                    top: confirmationSection.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        cancelButton.addEventListener('click', function() {
+            confirmationSection.style.display = 'none';
+        });
+    });
+</script>
+{% endblock %}

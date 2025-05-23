@@ -1,0 +1,105 @@
+/* Estilos para a página de acesso à votação */
+
+.admin-actions {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.admin-actions .btn {
+    margin-left: 10px;
+}
+
+.section-header {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+.eleicao-card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.eleicao-card:hover {
+    transform: translateY(-3px);
+}
+
+.eleicao-card .card-header {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.eleicao-status {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 3px;
+    color: white;
+}
+
+.status-agendada {
+    background-color: #6c757d;
+}
+
+.status-em_andamento {
+    background-color: #28a745;
+}
+
+.status-finalizada {
+    background-color: #007bff;
+}
+
+.status-cancelada {
+    background-color: #dc3545;
+}
+
+.actions-container {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.welcome-message {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 4px solid #007bff;
+}
+
+/* Estilo para botão de criar eleição */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .admin-actions {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .actions-container {
+        flex-direction: column;
+    }
+    
+    .actions-container .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+

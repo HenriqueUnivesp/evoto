@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Fundo -->
+  <rect width="400" height="400" fill="#a5d6a7"/>
+  
+  <!-- Cabelo curto -->
+  <path d="M160 130 Q200 110 240 130 Q260 120 270 140 Q280 160 260 180 L260 210 Q240 230 230 210 L170 210 Q160 230 140 210 L140 180 Q120 160 130 140 Q140 120 160 130 Z" fill="#2a1908"/>
+  
+  <!-- Rosto -->
+  <circle cx="200" cy="210" r="80" fill="#f1c27d"/>
+  
+  <!-- Olhos -->
+  <ellipse cx="170" cy="190" rx="10" ry="12" fill="white"/>
+  <ellipse cx="230" cy="190" rx="10" ry="12" fill="white"/>
+  <circle cx="170" cy="190" r="5" fill="#3f2a14"/>
+  <circle cx="230" cy="190" r="5" fill="#3f2a14"/>
+  
+  <!-- Sobrancelhas -->
+  <path d="M155 170 Q170 160 185 165" stroke="#2a1908" stroke-width="4" fill="none"/>
+  <path d="M215 165 Q230 160 245 170" stroke="#2a1908" stroke-width="4" fill="none"/>
+  
+  <!-- Boca -->
+  <path d="M180 235 Q200 245 220 235" stroke="#d35f5f" stroke-width="3" fill="none"/>
+  
+  <!-- Barba suave -->
+  <path d="M170 245 Q200 260 230 245 Q225 265 200 280 Q175 265 170 245" fill="#2a1908" fill-opacity="0.15"/>
+  
+  <!-- Óculos -->
+  <rect x="155" y="180" width="30" height="20" rx="5" fill="none" stroke="#546e7a" stroke-width="2"/>
+  <rect x="215" y="180" width="30" height="20" rx="5" fill="none" stroke="#546e7a" stroke-width="2"/>
+  <line x1="185" y1="190" x2="215" y2="190" stroke="#546e7a" stroke-width="2"/>
+  
+  <!-- Camisa/Jaqueta -->
+  <path d="M120 320 L150 250 Q170 270 200 280 Q230 270 250 250 L280 320" fill="#37474f"/>
+  <rect x="175" y="270" width="50" height="60" fill="#cfd8dc"/>
+  
+  <!-- Gravata -->
+  <path d="M200 280 L190 310 L200 320 L210 310 L200 280" fill="#ef5350"/>
+  
+  <!-- Nome do candidato -->
+  <rect x="100" y="340" width="200" height="40" rx="10" fill="#4caf50"/>
+  <text x="200" y="368" font-family="Arial" font-size="20" fill="white" text-anchor="middle">João Santos - 20</text>
+</svg>

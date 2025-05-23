@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmar Remoção de Chapa - Sistema de Eleição{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/form_eleicao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Remoção de Chapa</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <h5>Atenção!</h5>
+                <p>Você está prestes a excluir permanentemente a chapa <strong>{{ chapa.nome }}</strong>.</p>
+                <p>Esta ação não pode ser desfeita. Todos os dados relacionados a esta chapa serão perdidos.</p>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Informações da Chapa</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nome:</strong> {{ chapa.nome }}</p>
+                            <p><strong>Número:</strong> {{ chapa.numero }}</p>
+                            <p><strong>Slogan:</strong> {{ chapa.slogan }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Presidente:</strong> {{ chapa.presidente_nome }}</p>
+                            <p><strong>Vice-Presidente:</strong> {{ chapa.vice_nome }}</p>
+                            <p><strong>Data de Cadastro:</strong> {{ chapa.data_cadastro|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p><strong>Propostas:</strong> {{ chapa.propostas|truncatechars:200 }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="submit-container">
+                    <a href="{% url 'election:gerenciar_chapas' chapa.eleicao.id %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

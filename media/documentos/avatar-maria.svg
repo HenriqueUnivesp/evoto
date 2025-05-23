@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Fundo -->
+  <rect width="400" height="400" fill="#88c9f2"/>
+  
+  <!-- Cabelo -->
+  <path d="M200 320 L140 250 V150 Q140 70 200 70 Q260 70 260 150 V250 Z" fill="#5e3a1c"/>
+  
+  <!-- Rosto -->
+  <circle cx="200" cy="210" r="80" fill="#ffdbac"/>
+  
+  <!-- Olhos -->
+  <ellipse cx="170" cy="190" rx="10" ry="12" fill="white"/>
+  <ellipse cx="230" cy="190" rx="10" ry="12" fill="white"/>
+  <circle cx="170" cy="190" r="5" fill="#3f2a14"/>
+  <circle cx="230" cy="190" r="5" fill="#3f2a14"/>
+  
+  <!-- Sobrancelhas -->
+  <path d="M160 170 Q170 165 180 170" stroke="#5e3a1c" stroke-width="3" fill="none"/>
+  <path d="M220 170 Q230 165 240 170" stroke="#5e3a1c" stroke-width="3" fill="none"/>
+  
+  <!-- Boca -->
+  <path d="M180 240 Q200 250 220 240" stroke="#d35f5f" stroke-width="3" fill="none"/>
+  
+  <!-- Colar -->
+  <path d="M150 290 Q200 310 250 290" stroke="#e6347a" stroke-width="8" fill="none"/>
+  
+  <!-- Camisa -->
+  <path d="M120 320 L140 250 Q170 270 200 280 Q230 270 260 250 L280 320" fill="#7e57c2"/>
+  
+  <!-- Detalhe do cabelo (franja) -->
+  <path d="M160 150 Q180 130 200 140 Q220 130 240 150" fill="#5e3a1c"/>
+  
+  <!-- Brincos -->
+  <circle cx="135" cy="210" r="5" fill="#ffd700"/>
+  <circle cx="265" cy="210" r="5" fill="#ffd700"/>
+  
+  <!-- Nome do candidato -->
+  <rect x="100" y="340" width="200" height="40" rx="10" fill="#3f51b5"/>
+  <text x="200" y="368" font-family="Arial" font-size="20" fill="white" text-anchor="middle">Maria Silva - 10</text>
+</svg>

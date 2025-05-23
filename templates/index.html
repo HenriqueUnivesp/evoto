@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Sistema de Eleição - Grêmio Estudantil{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h2 class="mb-3">Sua voz, sua escola, seu futuro!</h2>
+            <p class="mb-4">O sistema oficial de eleições do Grêmio Estudantil proporciona uma plataforma segura, transparente e acessível para que todos os estudantes possam exercer seu direito democrático de escolher seus representantes.</p>
+            
+            <!-- Botões apenas para usuários não autenticados -->
+            {% if not user.is_authenticated %}
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{% url 'login' %}" class="btn btn-primary me-md-2">Entrar no Sistema</a>
+                <a href="{% url 'register' %}" class="btn btn-outline-primary">Cadastrar-se</a>
+            </div>
+            {% else %}
+            <div class="d-grid gap-2 d-md-block">
+                <a href="{% url 'election:acesso_votacao' %}" class="btn btn-primary me-md-2">Acesso Votação</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="fs-1 mb-3">📝</div>
+                    <h3 class="card-title">Cadastro de Chapas</h3>
+                    <p class="card-text">Registre sua chapa de forma simples e organizada. Apresente suas propostas e ideias para melhorar a escola e conquistar o apoio dos colegas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="fs-1 mb-3">🗳️</div>
+                    <h3 class="card-title">Votação Segura</h3>
+                    <p class="card-text">Sistema de votação seguro e auditável, garantindo a integridade do processo eleitoral e a confidencialidade do seu voto.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="fs-1 mb-3">📊</div>
+                    <h3 class="card-title">Resultados em Tempo Real</h3>
+                    <p class="card-text">Acompanhe os resultados da apuração em tempo real e de forma transparente, após o encerramento do período de votação.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <div class="bg-light p-4 rounded">
+                <h2 class="mb-3">Participe da construção de uma escola melhor!</h2>
+                <p class="mb-0">O Grêmio Estudantil é um importante espaço de representação e participação estudantil. Seja candidato ou eleitor, sua participação é fundamental para o fortalecimento da democracia na escola.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
